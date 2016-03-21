@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>glog</name>
-  <version>0.4.1</version>
+  <version>0.4.2</version>
   <description>glog fork</description>
 
   <author>Manuel Werlberger</author>
