@@ -8,7 +8,10 @@ if (POLICY CMP0063)
   cmake_policy (SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-project (google-glog)
+project (glog)
+
+find_package(catkin_simple REQUIRED)
+catkin_simple(ALL_DEPS_REQUIRED)
 
 enable_testing ()
 
@@ -368,7 +371,7 @@ if (WIN32)
   )
 endif (WIN32)
 
-add_library (glog
+cs_add_library (glog
   ${GLOG_SRCS}
 )
 
@@ -454,13 +457,13 @@ endif (UNIX OR (APPLE AND HAVE_DLADDR))
 
 # Unit testing
 
-add_executable (logging_unittest
+cs_add_executable (logging_unittest
   src/logging_unittest.cc
 )
 
 target_link_libraries (logging_unittest PRIVATE glog)
 
-add_executable (stl_logging_unittest
+cs_add_executable (stl_logging_unittest
   src/stl_logging_unittest.cc
 )
 
@@ -492,35 +495,35 @@ if (HAVE_EXT_SLIST)
 endif (HAVE_EXT_SLIST)
 
 if (HAVE_SYMBOLIZE)
-  add_executable (symbolize_unittest
+  cs_add_executable (symbolize_unittest
     src/symbolize_unittest.cc
   )
 
   target_link_libraries (symbolize_unittest PRIVATE glog)
 endif (HAVE_SYMBOLIZE)
 
-add_executable (demangle_unittest
+cs_add_executable (demangle_unittest
   src/demangle_unittest.cc
 )
 
 target_link_libraries (demangle_unittest PRIVATE glog)
 
 if (HAVE_STACKTRACE)
-  add_executable (stacktrace_unittest
+  cs_add_executable (stacktrace_unittest
     src/stacktrace_unittest.cc
   )
 
   target_link_libraries (stacktrace_unittest PRIVATE glog)
 endif (HAVE_STACKTRACE)
 
-add_executable (utilities_unittest
+cs_add_executable (utilities_unittest
   src/utilities_unittest.cc
 )
 
 target_link_libraries (utilities_unittest PRIVATE glog)
 
 if (HAVE_STACKTRACE AND HAVE_SYMBOLIZE)
-  add_executable (signalhandler_unittest
+  cs_add_executable (signalhandler_unittest
     src/signalhandler_unittest.cc
   )
 
@@ -565,30 +568,33 @@ find_dependency (gflags ${gflags_VERSION})
 ")
 endif (gflags_FOUND)
 
-configure_package_config_file (glog-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/glog-config.cmake INSTALL_DESTINATION
-  lib/cmake/glog PATH_VARS glog_INCLUDE_DIR
-  NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+# configure_package_config_file (glog-config.cmake.in
+#   ${CMAKE_CURRENT_BINARY_DIR}/glog-config.cmake INSTALL_DESTINATION
+#   lib/cmake/glog PATH_VARS glog_INCLUDE_DIR
+#   NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
-# The version file is the same both for build tree and install mode config
-write_basic_package_version_file (glog-config-version.cmake VERSION
-  ${GLOG_VERSION} COMPATIBILITY SameMajorVersion)
+# # The version file is the same both for build tree and install mode config
+# write_basic_package_version_file (glog-config-version.cmake VERSION
+#   ${GLOG_VERSION} COMPATIBILITY SameMajorVersion)
 
-# Install config
+# # Install config
 
-set (glog_INCLUDE_DIR include)
+# set (glog_INCLUDE_DIR include)
 
-configure_package_config_file (glog-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/glog-config.cmake
-  INSTALL_DESTINATION lib/cmake/glog PATH_VARS glog_INCLUDE_DIR
-  NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+# configure_package_config_file (glog-config.cmake.in
+#   ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/glog-config.cmake
+#   INSTALL_DESTINATION lib/cmake/glog PATH_VARS glog_INCLUDE_DIR
+#   NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
-export (TARGETS glog FILE glog-targets.cmake)
-export (PACKAGE glog)
+# export (TARGETS glog FILE glog-targets.cmake)
+# export (PACKAGE glog)
 
-install (FILES
-  ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/glog-config.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/glog-config-version.cmake
-  DESTINATION lib/cmake/glog)
+# install (FILES
+#   ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/glog-config.cmake
+#   ${CMAKE_CURRENT_BINARY_DIR}/glog-config-version.cmake
+#   DESTINATION lib/cmake/glog)
 
-install (EXPORT glog-targets DESTINATION lib/cmake/glog)
+# install (EXPORT glog-targets DESTINATION lib/cmake/glog)
+
+cs_install()
+cs_export()
